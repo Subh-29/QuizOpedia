@@ -15,8 +15,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);         // login/signup
-// app.use('/api/quiz', quizRoutes);         // quiz CRUD
-// app.use('/api/attempt', attemptRoutes);   // user attempts
+app.use('/api/quiz', quizRoutes);         // quiz CRUD
+app.use('/api/attempt', attemptRoutes);   // user attempts
 
 // Default Route
 app.get('/', (req, res) => {

@@ -8,6 +8,7 @@ export function protect(req, res, next) {
     }
 
     const token = authHeader.split(' ')[1];
+    
     try {
         const decode = verifyToken(token);
         req.user = decode;
