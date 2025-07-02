@@ -2,23 +2,29 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    data: [],
+    quizzes: [],
+    loading: true,
+    error: null
 }
 
 const quizSlice = createSlice({
-    name: "user",
+    name: "quiz",
     initialState,
     reducers: {
-        loaduser: (state, action) => {
-            // console.log("state: ", state);
-            // console.log("Action: ", action);
-            state.data = action.payload;
-            // console.log(state);
-            
+        setQuizzes: (state, action) => {
+            state.quizzes = action.payload;
         },
+
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+
+        setError: (state, action) => {
+            state.error = action.payload;
+        }
     },
 });
 
 
-export const { loaduser } = quizSlice.actions;
+export const { setQuizzes, setLoading, setError } = quizSlice.actions;
 export default quizSlice.reducer;
