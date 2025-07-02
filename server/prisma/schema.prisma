@@ -26,6 +26,7 @@ model Quiz {
   title     String
   topic     String
   tags      String[]
+  timeLimit Int        @default(30)   //
   createdAt DateTime   @default(now())
   questions Question[]
   attempts Attempt[]
