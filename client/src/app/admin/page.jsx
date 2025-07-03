@@ -5,12 +5,14 @@ import { useState } from 'react';
 
 const AdminDashboard = () => {
   const router = useRouter();
+  // localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzci1rLUhLMzRubzFlUVJnbWRYU05VblMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTE1MjUyOTgsImV4cCI6MTc1MjEzMDA5OH0.VIq3mfOnvrnB1sHE7F9c8LoJ0RLCg8ZcYqP9dI_BZj8");
 
   const [selectedRange, setSelectedRange] = useState('1 Week');
 
   const timeRanges = ['1 Day', '1 Week', '1 Month', '3 Months'];
 
   const quizShowHandler = () => {
+    
     router.push("/admin/quiz");
   }
 
@@ -52,8 +54,8 @@ const AdminDashboard = () => {
                 key={range}
                 onClick={() => setSelectedRange(range)}
                 className={`px-3 py-1 rounded-md text-sm ${selectedRange === range
-                    ? 'bg-[var(--accent)] text-white'
-                    : 'bg-[var(--soft)] text-[var(--text-primary)]'
+                  ? 'bg-[var(--accent)] text-white'
+                  : 'bg-[var(--soft)] text-[var(--text-primary)]'
                   } transition-all duration-200`}
               >
                 {range}

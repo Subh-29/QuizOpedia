@@ -4,9 +4,10 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 // import { clearAIQuestions } from '@/store/quizSlice';
 import { useEffect } from 'react';
+import { createQuiz } from '@/redux/actions/quizAction';
 
 export default function CreateQuizForm() {
-    //   const dispatch = useDispatch();
+    const dispatch = useDispatch();
     //   const aiQuestions = useSelector((state) => state.quiz.aiQuestions);
     const aiQuestions = null;
 
@@ -18,7 +19,7 @@ export default function CreateQuizForm() {
         },
     });
 
-    const { fields, append } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         control,
         name: 'questions',
     });
@@ -38,11 +39,21 @@ export default function CreateQuizForm() {
         }
     }, [aiQuestions, reset]);
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
+        data.title = "Cyber?";
+        data.tags = ["Cyber", "0 Day"];
         console.log(data);
+        try {
+            await dispatch(createQuiz(data));
+        } catch (error) {
+            console.log("error while creating!! ", error);
+
+        }
         // Send to backend later
     };
-
+    const deleteQnHandler = (fields,idx) => {
+        remove(idx);
+    }
     const addEmptyQuestion = () => {
         append({
             text: '',
@@ -85,11 +96,17 @@ export default function CreateQuizForm() {
                     {fields.map((field, index) => (
                         <div
                             key={field.id}
-                            className="p-6 bg-[var(--soft)]/70 border border-[var(--accent)] rounded-lg shadow-sm"
+                            className="p-6 bg-[var(--soft)]/70 border border-[var(--accent)] flex flex-col gap-2 rounded-lg shadow-sm"
                         >
-                            <h3 className="text-xl font-semibold mb-4 text-[var(--text-on-light)]">
-                                Q{index + 1}
-                            </h3>
+                            <div className=' flex justify-between items-center'>
+
+                                <h3 className="text-xl font-semibold text-[var(--text-on-light)]">
+                                    Q{index + 1}
+                                </h3>
+                                <span
+                                onClick={() => deleteQnHandler(fields, index)}
+                                className=' px-2 rounded-xl bg-[var(--errors)] md:hover:bg-[var(--errors)]/80 active:scale-96 '>Delete</span>
+                            </div>
 
                             {/* Question Text */}
                             <input

@@ -12,7 +12,7 @@ const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // 👇 POST /api/quiz/create — Create quiz manually (admin only)
 router.post('/create', protect, requireAdmin, async (req, res) => {
   try {
-    const { title, topic, tags, questions } = req.body;
+    const { title, topic, tags, questions, timePerQuestion } = req.body;
 
     const quiz = await prisma.quiz.create({
       data: {
@@ -20,6 +20,7 @@ router.post('/create', protect, requireAdmin, async (req, res) => {
         title,
         topic,
         tags,
+        timeLimit: Number(timePerQuestion),
         questions: {
           create: questions.map((q) => ({
             id: `qn-${nanoid()}`,
