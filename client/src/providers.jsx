@@ -8,8 +8,7 @@ const Providers = ({ children }) => {
 
   return (
     <ReduxProvider store={Store}>
-      {/* <ToastContainer
-      position="center" /> */}
+
         {children}
     </ReduxProvider>
   );

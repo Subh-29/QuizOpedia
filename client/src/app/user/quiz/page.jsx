@@ -1,7 +1,7 @@
 'use client';
 
 import getAllQuiz from '@/redux/actions/quizAction';
-import { getMyAttempts } from '@/redux/actions/attemptAction';
+import { getMyAttempts } from '../../../redux/actions/attemptAction';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';

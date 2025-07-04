@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleQuiz, deleteQuiz } from '@/redux/actions/quizAction';
+import { getSingleQuiz, deleteQuiz } from '../../../../../redux/actions/quizAction';
 
 export default function SingleQuizPage() {
   const { id } = useParams();

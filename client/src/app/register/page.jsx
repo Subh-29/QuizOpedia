@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import gsap from "gsap";
 import { useDispatch } from "react-redux";
-import { registerUser } from "@/redux/actions/userAction";
+import { registerUser } from "../../redux/actions/userAction";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {

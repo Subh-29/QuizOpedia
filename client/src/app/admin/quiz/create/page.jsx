@@ -3,8 +3,8 @@
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { createQuiz } from '@/redux/actions/quizAction';
-import { clearAiQuiz } from '@/redux/reducers/quizSlice';
+import { createQuiz } from '../../../../redux/actions/quizAction';
+import { clearAiQuiz } from '../../../../redux/reducers/quizSlice';
 import { useRouter } from 'next/navigation';
 
 export default function CreateQuizForm() {

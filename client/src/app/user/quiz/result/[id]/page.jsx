@@ -1,80 +1,10 @@
-// 'use client';
-
-// import { useEffect } from 'react';
-// import { useParams } from 'next/navigation';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { getQuizAttempt } from '@/redux/actions/attemptAction';
-
-// export default function QuizResultPage() {
-//   const { id } = useParams();
-//   const dispatch = useDispatch();
-
-//   const singQuiz = useSelector((state) => state?.attempt?.singleQuiz);
-//   const loading = useSelector((state) => state?.attempt?.loading);
-//   const error = useSelector((state) => state?.attempt?.error);
-// console.log(singQuiz);
-
-//   useEffect(() => {
-//     dispatch(getQuizAttempt(id));
-//   }, [dispatch, id]);
-
-//   if (loading) return <p className="text-center mt-10 text-lg">Loading attempt...</p>;
-//   if (error) return <p className="text-center mt-10 text-lg text-red-500">{error}</p>;
-//   if (!singQuiz) return <p className="text-center mt-10 text-lg text-red-500">No attempt found.</p>;
-
-//   const { quiz, question, answers, score } = singQuiz;
-
-//   return (
-//     <div className="max-w-3xl mx-auto p-6 bg-[var(--primary)] text-[var(--text-primary)] rounded-xl shadow-md mt-10">
-//       <h1 className="text-3xl font-bold mb-4 text-[var(--text-heading)]">
-//         📝 {quiz.title}
-//       </h1>
-//       <p className="text-lg mb-6">
-//         Your Score: <span className="font-bold text-[var(--accent)]">{score} / {question?.length}</span>
-//       </p>
-
-//       <div className="space-y-8">
-//         {question?.map((q, idx) => {
-//           const userAnswer = answers[q?.id];
-//           const isCorrect = userAnswer === q?.answer;
-
-//           return (
-//             <div key={q.id} className="p-4 border rounded-lg bg-[var(--soft)]/30">
-//               <h3 className="font-semibold mb-2">Q{idx + 1}. {q?.text}</h3>
-//               <ul className="mb-2 space-y-1">
-//                 {q.options.map((opt, i) => {
-//                   const isSelected = opt === userAnswer;
-//                   const isAnswer = opt === q.answer;
-
-//                   return (
-//                     <li
-//                       key={i}
-//                       className={`px-3 py-1 rounded-md border ${isAnswer ? 'border-green-500 bg-green-300/50' : isSelected ? 'bg-red-400/60' : '' } `}
-//                     >
-//                       {['A', 'B', 'C', 'D'][i]}. {opt}
-//                     </li>
-//                   );
-//                 })}
-//               </ul>
-
-//               <p className={`text-sm font-semibold ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
-//                 Your answer: {userAnswer || 'N/A'} {isCorrect ? '✅' : `❌ (Correct: ${q.answer})`}
-//               </p>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// }
-
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getQuizAttempt } from '@/redux/actions/attemptAction';
-import { askAiForExplanation } from '@/redux/actions/aiAction';
+import { getQuizAttempt } from '../../../../../redux/actions/attemptAction';
+import { askAiForExplanation } from '../../../../../redux/actions/aiAction';
 
 export default function QuizResultPage() {
   const { id } = useParams();

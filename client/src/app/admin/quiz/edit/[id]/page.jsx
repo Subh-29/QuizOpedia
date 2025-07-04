@@ -3,7 +3,7 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import getAllQuiz, { editQuiz, getSingleQuiz } from '@/redux/actions/quizAction';
+import getAllQuiz, { editQuiz, getSingleQuiz } from '../../../../../redux/actions/quizAction';
 import { useParams, useRouter } from 'next/navigation';
 
 export default function EditQuizForm() {

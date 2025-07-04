@@ -1,5 +1,5 @@
 // store/attemptAction.jsx
-import axios from '@/api/axiosconfig';
+import axios from '../../api/axiosconfig';
 import {
   setQuizData,
   answerQuestion,

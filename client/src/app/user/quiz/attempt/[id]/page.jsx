@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { answerQuestion, nextQuestion } from '@/redux/reducers/attemptSlice';
+import { answerQuestion, nextQuestion } from '../../../../../redux/reducers/attemptSlice';
 import gsap from 'gsap';
-import { getSingleQuiz } from '@/redux/actions/quizAction';
+import { getSingleQuiz } from '../../../../../redux/actions/quizAction';
 import { useParams, useRouter } from 'next/navigation';
-import { fetchQuizForAttempt, submitQuizAttempt } from '@/redux/actions/attemptAction';
+import { fetchQuizForAttempt, submitQuizAttempt } from '../../../../../redux/actions/attemptAction'
 
 const QuizCard = () => {
 

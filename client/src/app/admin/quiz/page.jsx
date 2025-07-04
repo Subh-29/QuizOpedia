@@ -1,6 +1,6 @@
 'use client';
 
-import getAllQuiz, { deleteQuiz } from '@/redux/actions/quizAction';
+import getAllQuiz, { deleteQuiz } from '../../../redux/actions/quizAction';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,4 +1,4 @@
-import axios from '@/api/axiosconfig';
+import axios from '../../api/axiosconfig';
 import { setExplanation } from '../reducers/aiSlice';
 
 export const askAiForExplanation = ({ question, userAnswer, correctAnswer, prompt }) => async (dispatch) => {

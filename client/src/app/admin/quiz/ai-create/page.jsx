@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { generateAIRes } from '@/redux/actions/quizAction';
+import { generateAIRes } from '../../../../redux/actions/quizAction';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 

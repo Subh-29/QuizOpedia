@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '@/redux/actions/userAction';
+import { loginUser } from '../../redux/actions/userAction';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 

@@ -1,9 +1,9 @@
 import Navbar from "../components/Nav.jsx";
 import "./globals.css";
 
-import Providers from '@/Providers.jsx'
+import Providers from '../Providers.jsx'
 import { ToastContainer } from "react-toastify";
-import Footer from "@/components/Footer.jsx";
+import Footer from "../components/Footer.jsx";
 
 export const metadata = {
   title: "QuizoPedia",

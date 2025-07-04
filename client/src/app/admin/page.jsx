@@ -1,6 +1,6 @@
 'use client';
 
-import AdminGuard from '@/components/AdminGuard';
+import AdminGuard from '../../components/AdminGuard';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
