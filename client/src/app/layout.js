@@ -17,13 +17,13 @@ export default function RootLayout({ children }) {
 
     <html lang="en">
       <body className=" bg-[var(--bg)] overflow-x-hidden relative">
-        {/* <Providers > */}
+        <Providers >
           <Navbar />
           {<main className=" pt-16 px-2 h-full w-full text-(--text-primary)  ">
             {children}
             <Footer />
           </main>}
-        {/* </Providers> */}
+        </Providers>
         <ToastContainer
           position="top-center"
           autoClose={3000}
