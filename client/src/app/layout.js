@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
   return (
 
     <html lang="en">
-      <body className=" bg-[var(--bg)] overflow-x-hidden">
+      <body className=" bg-[var(--bg)] overflow-x-hidden relative">
         <Providers >
           <Navbar />
           {<main className=" pt-16 px-2 h-full w-full text-(--text-primary)  ">

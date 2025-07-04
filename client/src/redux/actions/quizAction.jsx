@@ -3,7 +3,6 @@ import { setQuizzes, setAiQuiz, setLoading, setSingleQuiz, setError } from '../r
 
 const getAllQuiz = () => async (dispatch) => {
     try {
-        console.log("HELLOOOOO");
         
         const token = localStorage.getItem("token");
         const res = await axios.get("/api/quiz/all", {

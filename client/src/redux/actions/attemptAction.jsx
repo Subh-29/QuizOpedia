@@ -33,6 +33,7 @@ export const fetchQuizForAttempt = (quizId) => async (dispatch, getState) => {
 export const getQuizAttempt = (quizId) => async (dispatch, getState) => {
   try {
     const token = localStorage.getItem("token") || getState().user;
+    
     const {data} = await axios.get(`/api/attempt/my/${quizId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -88,8 +89,9 @@ export const getMyAttempts = () => async (dispatch, getState) => {
     const { data } = await axios.get('/api/attempt/my', {
       headers: { Authorization: `Bearer ${token}` }
     });
-
-    dispatch(setAttempts(data));
+    // console.log("data: ", data);
+    
+    dispatch(setAttempts(data.attempt));
   } catch (err) {
     dispatch(setError(err.response?.data?.error || 'Failed to fetch attempts'));
   } finally {

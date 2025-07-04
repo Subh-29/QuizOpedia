@@ -86,7 +86,7 @@ export default function UserDashboard() {
                                 <button className="bg-white text-[var(--text-accent)] font-bold py-2 px-4 rounded-xl">Join Lobby</button>
                                 <button
                                 onClick={() => router.push("/user/quiz")}
-                                className="bg-[var(--text-accent)] text-white font-bold py-2 px-4 rounded-xl">Start Quiz</button>
+                                className="bg-[var(--text-accent)]/70 text-white font-bold py-2 px-4 rounded-xl cursor-pointer md:hover:bg-[var(--text-accent)]">Start Quiz</button>
                             </div>
                         </div>
 

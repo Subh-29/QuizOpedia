@@ -104,9 +104,9 @@ export default function QuizResultPage() {
     dispatch(askAiForExplanation({ question: q.text, userAnswer: answers[q.id], correctAnswer: q.answer, prompt }));
   };
 
-  return (
+  return quiz ? (
     <div className=" max-w-8xl mx-auto p-6 bg-[var(--primary)] text-[var(--text-primary)] rounded-xl shadow-md mt-10">
-      <h1 className="text-3xl font-bold mb-4 text-[var(--text-heading)]">📝 {quiz.title}</h1>
+      <h1 className="text-3xl font-bold mb-4 text-[var(--text-heading)]">📝 {quiz?.title}</h1>
       <p className="text-lg mb-6">
         Your Score: <span className="font-bold text-[var(--accent)]">{score} / {question?.length}</span>
       </p>
@@ -117,10 +117,10 @@ export default function QuizResultPage() {
           const isCorrect = userAnswer === q?.answer;
 
           return (
-            <div key={q.id} className="p-4 border rounded-lg bg-[var(--soft)]/30">
+            <div key={q.id} className="p-4 h-fit border rounded-lg bg-[var(--soft)]/30">
               <h3 className="font-semibold mb-2 text-xl">Q{idx + 1}. {q?.text}</h3>
               <ul className="mb-2 space-y-1">
-                {q.options.map((opt, i) => {
+                {q?.options.map((opt, i) => {
                   const isSelected = opt === userAnswer;
                   const isAnswer = opt === q.answer;
                   return (
@@ -142,9 +142,9 @@ export default function QuizResultPage() {
                 <>
                   <button
                     onClick={() => setOpenAiBox(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
-                    className="mt-3 text-sm text-[var(--accent)] underline"
+                    className="mt-3 px-3 py-2 text-sm bg-[var(--accent)]/60 md:hover:bg-[var(--accent)] border rounded-2xl border-[var(--soft)] text-[var(--soft)]"
                   >
-                    {openAiBox[q.id] ? 'Hide AI Help ❌' : 'Ask AI 🤖'}
+                    {openAiBox[q.id] ? 'Hide AI Help ❌' : 'Ask AI'}
                   </button>
 
                   {openAiBox[q.id] && (
@@ -178,5 +178,8 @@ export default function QuizResultPage() {
         })}
       </div>
     </div>
-  );
+  ) :
+  (<div className=' w-full text-center items-center justify-center mt-10 text-5xl md:text-8xl text-red-500 '>
+    Invalid Attempt
+  </div>);
 }

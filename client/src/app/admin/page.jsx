@@ -78,7 +78,7 @@ const AdminDashboard = () => {
         <div className="flex justify-center md:justify-end gap-4">
           <button
             onClick={quizShowHandler}
-            className="px-6 py-3 rounded-md bg-[var(--accent)] text-white font-medium hover:bg-opacity-80 transition-all">
+            className="px-6 py-3 rounded-md bg-[var(--accent)]/80 md:hover:bg-[var(--accent)] cursor-pointer text-white font-medium hover:bg-opacity-80 transition-all">
             View Quizzes
           </button>
           <button className="px-6 py-3 rounded-md bg-[var(--accent)] text-white font-medium hover:bg-opacity-80 transition-all">

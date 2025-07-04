@@ -20,10 +20,10 @@ export default function Footer() {
         <div>
           <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">Quick Links</h3>
           <ul className="space-y-2">
-            <li><Link href="/" className="hover:text-[var(--accent)] transition">🏠 Home</Link></li>
-            <li><Link href="/about" className="hover:text-[var(--accent)] transition">ℹ️ About</Link></li>
-            <li><Link href="/leaderboard" className="hover:text-[var(--accent)] transition">🏆 Leaderboard</Link></li>
-            <li><Link href="/login" className="hover:text-[var(--accent)] transition">🔐 Login</Link></li>
+            <li><Link href="/" className="hover:text-[var(--accent)] transition">Home</Link></li>
+            <li><Link href="/about" className="hover:text-[var(--accent)] transition">About</Link></li>
+            <li><Link href="/contact" className="hover:text-[var(--accent)] transition">Contact</Link></li>
+            <li><Link href="/login" className="hover:text-[var(--accent)] transition">Login</Link></li>
           </ul>
         </div>
 

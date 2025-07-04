@@ -97,7 +97,7 @@ The final output must strictly follow this **JSON format**:
     const jsonString = text.slice(jsonStart, jsonEnd);
 
     const quiz = JSON.parse(jsonString);
-    console.log(quiz);
+    // console.log(quiz);
 
     res.json({ quiz }); // send to frontend to review & edit before saving
   } catch (err) {

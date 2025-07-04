@@ -58,12 +58,32 @@ router.post('/', protect, async (req, res) => {
   }
 });
 
+router.get('/my', protect, async (req, res) => {
+  try {
+    // console.log("Quiz: ", quizId);
+    
+    const attempt = await prisma.attempt.findMany({
+      where: { userId: req.user.id },
+      include: {
+        quiz: true
+      }
+    });
+    
+    res.json({attempt});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
 // 🧾 Fetch all attempts of a user (optional for dashboard/profile)
 router.get('/my/:id', protect, async (req, res) => {
   try {
     const quizId = req.params.id;
+    console.log("Quiz: ", quizId);
+    
     const attempt = await prisma.attempt.findFirst({
-      where: { quizId: req.params.id, userId: req.user.id },
+      where: { quizId, userId: req.user.id },
       include: {
         quiz: true
       }

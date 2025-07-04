@@ -22,16 +22,16 @@ const Navbar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log("Token: ", token);
+    // console.log("Token: ", token);
 
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log("decoded ", decoded);
+        // console.log("decoded ", decoded);
 
         setUser(decoded);
       } catch (err) {
-        console.error('Invalid token');
+        // console.error('Invalid token');
         setUser(null);
       }
     }
@@ -85,6 +85,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             <Link href="/" className={navLinkStyles('/')}>Home</Link>
             <Link href="/about" className={navLinkStyles('/about')}>About</Link>
+            <Link href="/contact" className={navLinkStyles('/contact')}>Contact Us</Link>
             {isUser && <Link href="/user" className={navLinkStyles('/user')}>User</Link>}
             {isUser && <Link href="/user/quiz" className={navLinkStyles('/user/quiz')}>Quiz</Link>}
             {isAdmin && <Link href="/admin" className={navLinkStyles('/admin')}>Admin</Link>}
@@ -103,10 +104,12 @@ const Navbar = () => {
         <div ref={menuRef} className="overflow-hidden md:hidden flex flex-col gap-2 py-1">
           <Link href="/" onClick={() => setMenuOpen(false)} className={navLinkStyles('/')}>Home</Link>
           <Link href="/about" onClick={() => setMenuOpen(false)} className={navLinkStyles('/about')}>About</Link>
+          <Link href="/contact" onClick={() => setMenuOpen(false)} className={navLinkStyles('/contact')}>Contact Us</Link>
+          
           {isUser && <Link href="/user" onClick={() => setMenuOpen(false)} className={navLinkStyles('/user')}>User</Link>}
-          {isUser && <Link href="/user/quiz" className={navLinkStyles('/user/quiz')}>Quiz</Link>}
+          {isUser && <Link href="/user/quiz" onClick={() => setMenuOpen(false)} className={navLinkStyles('/user/quiz')}>Quiz</Link>}
           {isAdmin && <Link href="/admin" onClick={() => setMenuOpen(false)} className={navLinkStyles('/admin')}>Admin</Link>}
-          {isAdmin && <Link href="/admin/quiz" className={navLinkStyles('/admin/quiz')}>Admin Quiz</Link>}
+          {isAdmin && <Link href="/admin/quiz" onClick={() => setMenuOpen(false)} className={navLinkStyles('/admin/quiz')}>Admin Quiz</Link>}
 
           {user ? (
             <button onClick={handleLogout} className="text-left text-red-400 hover:text-white px-4 py-2 rounded-md transition-all">
