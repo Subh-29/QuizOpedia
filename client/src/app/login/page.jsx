@@ -24,7 +24,6 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Login with', email, password);
     try {
       await dispatch(loginUser({email, password}));
       router.push("/user/quiz");
@@ -32,7 +31,7 @@ export default function Login() {
       
     } catch (error) {
       console.log("the error in: ", error);
-      toast.error("Bad creds!!");
+      toast.error("Invalid creds!!");
     }
   };
 

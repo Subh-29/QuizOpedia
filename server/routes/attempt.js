@@ -80,7 +80,7 @@ router.get('/my', protect, async (req, res) => {
 router.get('/my/:id', protect, async (req, res) => {
   try {
     const quizId = req.params.id;
-    console.log("Quiz: ", quizId);
+    // console.log("Quiz: ", quizId);
     
     const attempt = await prisma.attempt.findFirst({
       where: { quizId, userId: req.user.id },
