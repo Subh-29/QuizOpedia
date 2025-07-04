@@ -1,7 +1,7 @@
 import Navbar from "../components/Nav.jsx";
 import "./globals.css";
 
-// import Providers from '../utils/Providers.jsx'
+import Providers from '../utils/Providers.jsx'
 import { ToastContainer } from "react-toastify";
 import Footer from "../components/Footer.jsx";
 
@@ -17,13 +17,13 @@ export default function RootLayout({ children }) {
 
     <html lang="en">
       <body className=" bg-[var(--bg)] overflow-x-hidden relative">
-        <Providers >
+        {/* <Providers > */}
           <Navbar />
           {<main className=" pt-16 px-2 h-full w-full text-(--text-primary)  ">
             {children}
             <Footer />
           </main>}
-        </Providers>
+        {/* </Providers> */}
         <ToastContainer
           position="top-center"
           autoClose={3000}
