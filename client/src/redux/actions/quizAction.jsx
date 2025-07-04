@@ -2,66 +2,68 @@ import axios from '../../api/axiosconfig';
 import { setQuizzes, setAiQuiz, setLoading, setSingleQuiz, setError } from '../reducers/quizSlice';
 
 const getAllQuiz = () => async (dispatch) => {
-    try {
-        
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/quiz/all", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            }
-        });
-        // console.log(res);
-        dispatch(setQuizzes(res.data))
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+
+    const token = localStorage.getItem("token");
+    const res = await axios.get("/api/quiz/all", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }
+    });
+    // console.log(res);
+    dispatch(setQuizzes(res.data))
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export const generateAIRes = (data) => async (dispatch) => {
-    try {
-        const res = await axios.post("/api/quiz/ai-assist", data, {
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzci1rLUhLMzRubzFlUVJnbWRYU05VblMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTE1MjUyOTgsImV4cCI6MTc1MjEzMDA5OH0.VIq3mfOnvrnB1sHE7F9c8LoJ0RLCg8ZcYqP9dI_BZj8",
-                "Content-Type": "application/json"
-            }
-        })
-        const quiz = res.data.quiz;
-        console.log(quiz);
-        dispatch(setAiQuiz(quiz));
-        // localStorage.setItem("quiz", quiz);
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.post("/api/quiz/ai-assist", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    const quiz = res.data.quiz;
+    console.log(quiz);
+    dispatch(setAiQuiz(quiz));
+    // localStorage.setItem("quiz", quiz);
 
-        console.log("GOt the aiiiiiii");
-        
-    } catch (error) {
-        console.log(error);
-        
-    }
+    console.log("GOt the aiiiiiii");
+
+  } catch (error) {
+    console.log(error);
+
+  }
 }
 
 export const createQuiz = (data) => async (dispatch) => {
-    try {
-        const res = await axios.post("/api/quiz/create", data, {
-            headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzci1rLUhLMzRubzFlUVJnbWRYU05VblMiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTE1MjUyOTgsImV4cCI6MTc1MjEzMDA5OH0.VIq3mfOnvrnB1sHE7F9c8LoJ0RLCg8ZcYqP9dI_BZj8",
-                "Content-Type": "application/json"
-            }
-        })
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.post("/api/quiz/create", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
 
-        console.log("Quiz created: ", res);
-        
-    } catch (error) {
-        console.log(error);
-        
-    }
+    console.log("Quiz created: ", res);
+
+  } catch (error) {
+    console.log(error);
+
+  }
 }
 
 // 👇 GET single quiz by ID
 export const getSingleQuiz = (id) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    console.log( id);
-    
+    console.log(id);
+
     const res = await axios.get(`/api/quiz/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -105,7 +107,7 @@ export const deleteQuiz = (id) => async (dispatch) => {
     });
 
     // Optional: refresh quiz list
-    dispatch(getAllQuiz()); 
+    dispatch(getAllQuiz());
   } catch (error) {
     console.error("❌ Failed to delete quiz:", error);
     dispatch(setError(error.response?.data?.error || "Something went wrong"));
