@@ -12,7 +12,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(cors({origin: ['https://jz3w10vb-3000.inc1.devtunnels.ms', 'http://localhost:3000/', 'https://quiz-opedia-ai.vercel.app/']}));
+// app.use(cors({origin: ['https://jz3w10vb-3000.inc1.devtunnels.ms', 'http://localhost:3000/', 'https://quiz-opedia-ai.vercel.app/']}));
 // Routes
 app.use('/api/auth', authRoutes);         // login/signup
 app.use('/api/quiz', quizRoutes);         // quiz CRUD
