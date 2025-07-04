@@ -1,23 +1,39 @@
 'use client';
 
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
-// import { clearAIQuestions } from '@/store/quizSlice';
 import { useEffect } from 'react';
 import { createQuiz } from '@/redux/actions/quizAction';
+import { clearAiQuiz } from '@/redux/reducers/quizSlice';
+import { useRouter } from 'next/navigation';
 
 export default function CreateQuizForm() {
     const dispatch = useDispatch();
-    //   const aiQuestions = useSelector((state) => state.quiz.aiQuestions);
-    const aiQuestions = null;
+    const quiz = useSelector((state) => state.quiz.aiQuiz);
+    const router = useRouter();
 
     const { register, control, handleSubmit, reset } = useForm({
         defaultValues: {
             topic: '',
-            timePerQuestion: '',
+            timePerQuestion: 30,
             questions: [],
         },
     });
+    const watchedQuestions = useWatch({ control, name: 'questions' }); // real-time tracking
+
+    const isLastQuestionComplete = () => {
+        if (!watchedQuestions || watchedQuestions.length === 0) return true;
+
+        const lastQ = watchedQuestions[watchedQuestions.length - 1];
+
+        const isQuestionFilled = lastQ.text?.trim() !== '';
+        const areOptionsFilled = Array.isArray(lastQ.options) &&
+            lastQ.options.length === 4 &&
+            lastQ.options.every((opt) => opt?.label?.trim?.() !== '');
+        const isAnswerSelected = lastQ.answer?.trim() !== '';
+
+        return isQuestionFilled && areOptionsFilled && isAnswerSelected;
+    };
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -25,39 +41,43 @@ export default function CreateQuizForm() {
     });
 
     useEffect(() => {
-        if (aiQuestions?.length) {
+        if (quiz?.questions?.length) {
             reset({
-                topic: '',
-                timePerQuestion: '',
-                questions: aiQuestions.map(q => ({
+                topic: quiz.topic,
+                timePerQuestion: 30,
+                questions: quiz.questions.map(q => ({
                     text: q.text,
-                    options: q.options,
+                    options: q.options.map(opt => ({ label: opt })), // ✅ fixed shape
                     answer: q.answer,
                 })),
             });
-            //   dispatch(clearAIQuestions());
+            dispatch(clearAiQuiz());
         }
-    }, [aiQuestions, reset]);
+    }, [quiz, reset]);
 
     const onSubmit = async (data) => {
-        data.title = "Cyber?";
-        data.tags = ["Cyber", "0 Day"];
+        data.questions = data.questions.map(q => ({
+            ...q,
+            options: q.options.map(opt => opt.label || ''), // ✅ flatten back
+        }));
+        data.tags = quiz?.tags || [data.topic];
+        data.title = (quiz?.topic || data.topic) + " Quiz";
+
         console.log(data);
         try {
             await dispatch(createQuiz(data));
+            router.push("/admin/quiz")
         } catch (error) {
-            console.log("error while creating!! ", error);
-
+            console.error("💥 error while creating quiz: ", error);
         }
-        // Send to backend later
     };
-    const deleteQnHandler = (fields,idx) => {
-        remove(idx);
-    }
+
+    const deleteQnHandler = (idx) => remove(idx);
+
     const addEmptyQuestion = () => {
         append({
             text: '',
-            options: ['', '', '', ''],
+            options: [{ label: '' }, { label: '' }, { label: '' }, { label: '' }],
             answer: '',
         });
     };
@@ -69,7 +89,6 @@ export default function CreateQuizForm() {
             </h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-
                 {/* Quiz Topic */}
                 <div>
                     <label className="block text-[var(--text-primary)] font-semibold mb-2">Quiz Topic</label>
@@ -98,14 +117,16 @@ export default function CreateQuizForm() {
                             key={field.id}
                             className="p-6 bg-[var(--soft)]/70 border border-[var(--accent)] flex flex-col gap-2 rounded-lg shadow-sm"
                         >
-                            <div className=' flex justify-between items-center'>
-
+                            <div className="flex justify-between items-center">
                                 <h3 className="text-xl font-semibold text-[var(--text-on-light)]">
                                     Q{index + 1}
                                 </h3>
                                 <span
-                                onClick={() => deleteQnHandler(fields, index)}
-                                className=' px-2 rounded-xl bg-[var(--errors)] md:hover:bg-[var(--errors)]/80 active:scale-96 '>Delete</span>
+                                    onClick={() => deleteQnHandler(index)}
+                                    className="px-2 rounded-xl bg-[var(--errors)] md:hover:bg-[var(--errors)]/80 active:scale-96 cursor-pointer"
+                                >
+                                    Delete
+                                </span>
                             </div>
 
                             {/* Question Text */}
@@ -123,7 +144,7 @@ export default function CreateQuizForm() {
                                             Option {opt}
                                         </label>
                                         <input
-                                            {...register(`questions.${index}.options.${optIndex}`)}
+                                            {...register(`questions.${index}.options.${optIndex}.label`)} // ✅ correct path
                                             placeholder={`Option ${opt}`}
                                             className="w-full bg-[var(--primary)] border border-[var(--soft)] px-4 py-2 rounded-md text-[var(--text-primary)] focus:outline-none"
                                         />
@@ -138,37 +159,41 @@ export default function CreateQuizForm() {
                                 </label>
                                 <select
                                     {...register(`questions.${index}.answer`)}
-                                    className="w-full bg-[var(--primary)] border border-[var(--accent)] px-4 py-2 rounded-md"
+                                    className="w-full bg-[var(--primary)]/70 border border-[var(--accent)] px-4 py-2 rounded-md"
                                 >
                                     <option value="">Select the correct answer</option>
-                                    {['A', 'B', 'C', 'D'].map((opt, i) => (
-                                        <option
-                                            key={opt}
-                                            value={fields[index]?.options?.[i] || ''}
-                                        >
-                                            {opt}
+                                    {watchedQuestions?.[index]?.options?.map((opt, i) => (
+                                        <option key={i} value={opt?.label || ''}>
+                                            {['A', 'B', 'C', 'D'][i]} - {opt?.label || ''}
                                         </option>
                                     ))}
                                 </select>
+
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Add Qn */}
+                {/* Add Question */}
                 <button
                     type="button"
                     onClick={addEmptyQuestion}
-                    className="inline-block bg-[var(--accent)] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[var(--text-accent)] transition-all duration-200"
+                    disabled={!isLastQuestionComplete()}
+                    className={`inline-block px-6 py-3 rounded-lg font-semibold transition-all duration-200 cursor-pointer
+    ${isLastQuestionComplete()
+                            ? 'bg-[var(--accent)] text-white hover:bg-[var(--text-accent)]'
+                            : 'bg-gray-400 text-white opacity-70 cursor-not-allowed'}
+  `}
                 >
                     ➕ Add More Question
                 </button>
+
 
                 {/* Submit */}
                 <div className="pt-4">
                     <button
                         type="submit"
-                        className="bg-[var(--text-accent)] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[var(--accent)] transition-all duration-200"
+                        className="bg-[var(--text-accent)] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[var(--accent)] transition-all duration-200 cursor-pointer"
                     >
                         🚀 Save Quiz
                     </button>

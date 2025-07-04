@@ -1,6 +1,6 @@
 'use client';
 
-import getAllQuiz from '@/redux/actions/quizAction';
+import getAllQuiz, { deleteQuiz } from '@/redux/actions/quizAction';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,21 +18,17 @@ const QuizPage = () => {
     dispatch(getAllQuiz());
   }, [dispatch]);
 
-  // const [quizzes, setQuizzes] = useState([
-  //   { id: 1, title: 'JavaScript Basics' },
-  //   { id: 2, title: 'Operating Systems' },
-  //   { id: 3, title: 'Data Structures' },
-  // ]);
 
   const handleEdit = (id) => {
     console.log('Edit quiz with id:', id);
+    router.push(`/admin/quiz/edit/${id}`);
     // route to edit page
   };
 
   const handleDelete = (id) => {
     const confirmed = confirm("Are you sure you want to delete this quiz?");
     if (confirmed) {
-      setQuizzes(prev => prev.filter(q => q.id !== id));
+      dispatch(deleteQuiz(id));
     }
   };
 
@@ -70,6 +66,12 @@ const QuizPage = () => {
             <h2 className="text-lg font-semibold text-[var(--text-heading)]">{quiz.title}</h2>
 
             <div className="flex justify-end gap-3 mt-4">
+              <button
+                onClick={() => router.push(`/admin/quiz/singleQuiz/${quiz.id}`)}
+                className="px-4 py-1 text-sm bg-[var(--soft)] text-[var(--text-accent)] rounded-md hover:opacity-90"
+              >
+                View
+              </button>
               <button
                 // onClick={() => handleEdit(quiz.id)}
                 className="px-4 py-1 text-sm bg-[var(--soft)] text-[var(--text-accent)] rounded-md hover:opacity-90"

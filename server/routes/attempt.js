@@ -9,6 +9,8 @@ const router = express.Router();
 router.post('/', protect, async (req, res) => {
   const { quizId, answers } = req.body;
   const userId = req.user.id;
+  console.log(userId);
+  
 
   try {
     // 👀 Check if user already attempted this quiz
@@ -41,7 +43,7 @@ router.post('/', protect, async (req, res) => {
     // 💾 Save attempt
     const attempt = await prisma.attempt.create({
       data: {
-        id: nanoid(),
+        id: `atp-` + nanoid(),
         quizId,
         userId,
         answers,
@@ -57,16 +59,19 @@ router.post('/', protect, async (req, res) => {
 });
 
 // 🧾 Fetch all attempts of a user (optional for dashboard/profile)
-router.get('/my', protect, async (req, res) => {
+router.get('/my/:id', protect, async (req, res) => {
   try {
-    const attempts = await prisma.attempt.findMany({
-      where: { userId: req.user.id },
+    const quizId = req.params.id;
+    const attempt = await prisma.attempt.findFirst({
+      where: { quizId: req.params.id, userId: req.user.id },
       include: {
         quiz: true
       }
     });
-
-    res.json(attempts);
+    const question = await prisma.question.findMany({
+      where: { quizId},
+    });
+    res.json({...attempt, question});
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Something went wrong' });

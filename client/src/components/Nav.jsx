@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import gsap from 'gsap';
+import { jwtDecode } from 'jwt-decode';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '@/redux/actions/userAction'
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -15,10 +18,23 @@ const Navbar = () => {
 
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem('user'));
-    if (localUser) setUser(localUser);
+    const token = localStorage.getItem('token');
+    console.log("Token: ", token);
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        console.log("decoded ", decoded);
+
+        setUser(decoded);
+      } catch (err) {
+        console.error('Invalid token');
+        setUser(null);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -41,11 +57,14 @@ const Navbar = () => {
       : 'text-zinc-300 hover:text-[var(--text-on-light)] hover:bg-[var(--soft)]/50 px-4 py-2 rounded-md transition-all';
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    dispatch(logoutUser());
     setUser(null);
     setMenuOpen(false);
     router.push('/');
   };
+
+  const isAdmin = user?.role === 'admin';
+  const isUser = user;
 
   return (
     <nav className="bg-zinc-900/60 backdrop-blur-md shadow-md fixed top-0 w-full z-50">
@@ -65,9 +84,11 @@ const Navbar = () => {
           {/* Desktop */}
           <div className="hidden md:flex items-center space-x-4">
             <Link href="/" className={navLinkStyles('/')}>Home</Link>
-            <Link href="/admin" className={navLinkStyles('/admin')}>Admin</Link>
-            <Link href="/leaderboard" className={navLinkStyles('/leaderboard')}>Leaderboard</Link>
-            {user?.role === 'admin' && <Link href="/admin" className={navLinkStyles('/admin')}>Admin</Link>}
+            <Link href="/about" className={navLinkStyles('/about')}>About</Link>
+            {isUser && <Link href="/user" className={navLinkStyles('/user')}>User</Link>}
+            {isUser && <Link href="/user/quiz" className={navLinkStyles('/user/quiz')}>Quiz</Link>}
+            {isAdmin && <Link href="/admin" className={navLinkStyles('/admin')}>Admin</Link>}
+            {isAdmin && <Link href="/admin/quiz" className={navLinkStyles('/admin/quiz')}>Admin Quiz</Link>}
             {user ? (
               <button onClick={handleLogout} className="text-red-400 hover:text-white px-4 py-2 rounded-md transition-all">
                 Logout
@@ -81,9 +102,12 @@ const Navbar = () => {
         {/* Mobile */}
         <div ref={menuRef} className="overflow-hidden md:hidden flex flex-col gap-2 py-1">
           <Link href="/" onClick={() => setMenuOpen(false)} className={navLinkStyles('/')}>Home</Link>
-          <Link href="/admin" onClick={() => setMenuOpen(false)} className={navLinkStyles('/admin')}>Admin</Link>
-          <Link href="/leaderboard" onClick={() => setMenuOpen(false)} className={navLinkStyles('/leaderboard')}>Leaderboard</Link>
-          {user?.role === 'admin' && <Link href="/admin" onClick={() => setMenuOpen(false)} className={navLinkStyles('/admin')}>Admin</Link>}
+          <Link href="/about" onClick={() => setMenuOpen(false)} className={navLinkStyles('/about')}>About</Link>
+          {isUser && <Link href="/user" onClick={() => setMenuOpen(false)} className={navLinkStyles('/user')}>User</Link>}
+          {isUser && <Link href="/user/quiz" className={navLinkStyles('/user/quiz')}>Quiz</Link>}
+          {isAdmin && <Link href="/admin" onClick={() => setMenuOpen(false)} className={navLinkStyles('/admin')}>Admin</Link>}
+          {isAdmin && <Link href="/admin/quiz" className={navLinkStyles('/admin/quiz')}>Admin Quiz</Link>}
+
           {user ? (
             <button onClick={handleLogout} className="text-left text-red-400 hover:text-white px-4 py-2 rounded-md transition-all">
               Logout

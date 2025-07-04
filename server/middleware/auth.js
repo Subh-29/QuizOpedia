@@ -11,6 +11,8 @@ export function protect(req, res, next) {
     
     try {
         const decode = verifyToken(token);
+        console.log(decode);
+        
         req.user = decode;
         next();
     } catch (error) {

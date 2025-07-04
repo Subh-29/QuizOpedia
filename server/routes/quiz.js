@@ -1,13 +1,18 @@
 import express from 'express';
 import prisma from '../prisma.js';
+import dotenv from 'dotenv'
+
 import { protect, requireAdmin } from '../middleware/auth.js';
 // import { openaiGenerateQuiz } from '../utils/openai.js'; // You'll create this
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { nanoid } from 'nanoid';
 
-const router = express.Router();
+dotenv.config(); // Loads .env variables
 
-const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const router = express.Router();
+const apikey = (process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+const genAi = new GoogleGenerativeAI(apikey);
 
 // 👇 POST /api/quiz/create — Create quiz manually (admin only)
 router.post('/create', protect, requireAdmin, async (req, res) => {
@@ -43,47 +48,113 @@ router.post('/create', protect, requireAdmin, async (req, res) => {
 
 // 👇 POST /api/quiz/ai-assist — Generate quiz using OpenAI
 router.post('/ai-assist', protect, requireAdmin, async (req, res) => {
-  try {
-    const { topic, numQuestions } = req.body;
 
-    if (!topic || !numQuestions) {
+  const { topic, numOfQn } = req.body;
+  try {
+
+    if (!topic || !numOfQn) {
       return res.status(400).json({ error: 'Topic and number of questions required' });
     }
 
     const model = genAi.getGenerativeModel({ model: "gemini-2.5-flash" });
-
     const prompt = `
-Generate ${numQuestions} multiple choice questions (MCQs) on the topic "${topic}".
-Each question must include:
-- A question (string)
-- An array of 4 options
-- A correct answer (must be one of the 4 options)
+You are to generate a quiz in JSON format.
 
-Respond only in **JSON format** like:
-[
-  {
-    "text": "What is ...?",
-    "options": ["A", "B", "C", "D"],
-    "answer": "Correct Option"
-  }
-]
-  `;
+- Topic: "${topic}"
+- Number of questions: ${numOfQn}
+- Each question must be a multiple choice question (MCQ).
+- Every question should have:
+  - "text" (string): The question itself
+  - "options" (array of 4 strings): Exactly 4 answer choices
+  - "answer" (string): One of the 4 options which is the correct answer
+
+The final output must strictly follow this **JSON format**:
+
+{
+  "title": "${topic} Quiz",
+  "topic": "${topic}",
+  "tags": ["${topic}", "Next tag similar to topic"],
+  "questions": [
+    {
+      "text": "Question 1 goes here...",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "answer": "Option A"
+    },
+    ...
+  ]
+}
+
+`;
+
+
 
     const result = await model.generateContent(prompt);
 
-    const text = result.response.text();
-    const jsonStart = text.indexOf('[');
-    const jsonEnd = text.lastIndexOf(']') + 1;
+    const text = result.response.candidates[0].content.parts[0].text;
+    const jsonStart = text.indexOf('{');
+    const jsonEnd = text.lastIndexOf('}') + 1;
 
     const jsonString = text.slice(jsonStart, jsonEnd);
 
-    const questions = JSON.parse(jsonString);
-    console.log(questions);
-    
-    res.json({ questions }); // send to frontend to review & edit before saving
+    const quiz = JSON.parse(jsonString);
+    console.log(quiz);
+
+    res.json({ quiz }); // send to frontend to review & edit before saving
   } catch (err) {
     console.error('❌ AI Assist failed:', err);
-    res.status(500).json({ error: 'AI generation failed' });
+//     const model = genAi.getGenerativeModel({ model: "gemini-2.5-flash" });
+// const prompt = `
+// You are to generate a quiz in JSON format.
+
+// - Topic: "${topic}"
+// - Number of questions: ${numQuestions}
+// - Each question must be a multiple choice question (MCQ).
+// - Every question should have:
+//   - "text" (string): The question itself
+//   - "options" (array of 4 strings): Exactly 4 answer choices
+//   - "answer" (string): One of the 4 options which is the correct answer
+
+// The final output must strictly follow this **JSON format**:
+
+// {
+//   "title": "${topic} Quiz",
+//   "topic": "${topic}",
+//   "tags": ["${topic}", "Next tag similar to topic"],
+//   "questions": [
+//     {
+//       "text": "Question 1 goes here...",
+//       "options": ["Option A", "Option B", "Option C", "Option D"],
+//       "answer": "Option A"
+//     },
+//     ...
+//   ]
+// }
+
+// `;
+//     const result = await model.generateContent(prompt)
+//     console.log(result);
+
+    res.status(500).json({ error: "AI generation failed" });
+  }
+});
+
+// 👇 DELETE /api/quiz/:id — Delete a quiz (admin only)
+router.delete('/:id', protect, requireAdmin, async (req, res) => {
+  try {
+    // First delete the questions linked to the quiz
+    await prisma.question.deleteMany({
+      where: { quizId: req.params.id }
+    });
+
+    // Then delete the quiz itself
+    await prisma.quiz.delete({
+      where: { id: req.params.id }
+    });
+
+    res.json({ message: 'Quiz deleted successfully' });
+  } catch (err) {
+    console.error('❌ Error deleting quiz:', err);
+    res.status(500).json({ error: 'Failed to delete quiz' });
   }
 });
 

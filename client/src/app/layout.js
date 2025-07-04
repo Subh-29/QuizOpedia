@@ -1,7 +1,9 @@
-import Navbar from "./components/Nav";
+import Navbar from "../components/Nav.jsx";
 import "./globals.css";
 
 import Providers from '../Providers'
+import { ToastContainer } from "react-toastify";
+import Footer from "@/components/Footer.jsx";
 
 export const metadata = {
   title: "QuizoPedia",
@@ -14,13 +16,25 @@ export default function RootLayout({ children }) {
   return (
 
     <html lang="en">
-      <body className=" bg-(--bg)">
+      <body className=" bg-[var(--bg)] overflow-x-hidden">
         <Providers >
-        <Navbar />
-          {<main className=" pt-16 px-2 h-full w-full text-(--text-primary) ">
+          <Navbar />
+          {<main className=" pt-16 px-2 h-full w-full text-(--text-primary)  ">
             {children}
+            <Footer />
           </main>}
         </Providers>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored" // or "dark", "light"
+        />
       </body>
     </html>
   );

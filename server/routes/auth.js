@@ -8,7 +8,7 @@ const router = express.Router();
 
 // ✅ Signup Route
 router.post('/signup', async (req, res) => {
-  const { email, password, role } = req.body;
+  const {name, email, password, role } = req.body;
 
   try {
     // ❗Check if user already exists
@@ -46,7 +46,8 @@ router.post('/signup', async (req, res) => {
 // ✅ Login Route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(email, " ", password);
+  
   try {
     // 🔍 Check if user exists
     const user = await prisma?.user?.findUnique({ where: { email } });

@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import quizRoutes from './routes/quiz.js'; // you'll create this
 import attemptRoutes from './routes/attempt.js'; // you'll create this too
-
+import aiRoutes from './routes/ai.js'
 dotenv.config(); // Loads .env variables
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);         // login/signup
 app.use('/api/quiz', quizRoutes);         // quiz CRUD
 app.use('/api/attempt', attemptRoutes);   // user attempts
-
+app.use('/api/ai', aiRoutes)
 // Default Route
 app.get('/', (req, res) => {
   res.send('QuizOpedia API running 🚀');
