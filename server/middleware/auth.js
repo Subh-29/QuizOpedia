@@ -2,7 +2,8 @@ import { verifyToken } from '../utils/jwt.js'
 
 export function protect(req, res, next) {
     const authHeader = req.headers.authorization;
-
+    console.log();
+    
     if (!authHeader) {
         return res.status(401).json({ error: "No token provided" });
     }
