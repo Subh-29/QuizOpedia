@@ -1,7 +1,3 @@
-Bet. Here's the **fully professional, no-nonsense README** for your **Quizopedia** project — straight to the point, everything a dev or reviewer needs to get up and running like a pro.
-
----
-
 ## 💡 What is Quizopedia?
 
 **Quizopedia** is a full-stack quiz management system where:
