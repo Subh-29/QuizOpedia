@@ -3,7 +3,6 @@ import prisma from '../prisma.js';
 import dotenv from 'dotenv'
 
 import { protect, requireAdmin } from '../middleware/auth.js';
-// import { openaiGenerateQuiz } from '../utils/openai.js'; // You'll create this
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { nanoid } from 'nanoid';
 
@@ -102,37 +101,37 @@ The final output must strictly follow this **JSON format**:
     res.json({ quiz }); // send to frontend to review & edit before saving
   } catch (err) {
     console.error('❌ AI Assist failed:', err);
-//     const model = genAi.getGenerativeModel({ model: "gemini-2.5-flash" });
-// const prompt = `
-// You are to generate a quiz in JSON format.
+    //     const model = genAi.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // const prompt = `
+    // You are to generate a quiz in JSON format.
 
-// - Topic: "${topic}"
-// - Number of questions: ${numQuestions}
-// - Each question must be a multiple choice question (MCQ).
-// - Every question should have:
-//   - "text" (string): The question itself
-//   - "options" (array of 4 strings): Exactly 4 answer choices
-//   - "answer" (string): One of the 4 options which is the correct answer
+    // - Topic: "${topic}"
+    // - Number of questions: ${numQuestions}
+    // - Each question must be a multiple choice question (MCQ).
+    // - Every question should have:
+    //   - "text" (string): The question itself
+    //   - "options" (array of 4 strings): Exactly 4 answer choices
+    //   - "answer" (string): One of the 4 options which is the correct answer
 
-// The final output must strictly follow this **JSON format**:
+    // The final output must strictly follow this **JSON format**:
 
-// {
-//   "title": "${topic} Quiz",
-//   "topic": "${topic}",
-//   "tags": ["${topic}", "Next tag similar to topic"],
-//   "questions": [
-//     {
-//       "text": "Question 1 goes here...",
-//       "options": ["Option A", "Option B", "Option C", "Option D"],
-//       "answer": "Option A"
-//     },
-//     ...
-//   ]
-// }
+    // {
+    //   "title": "${topic} Quiz",
+    //   "topic": "${topic}",
+    //   "tags": ["${topic}", "Next tag similar to topic"],
+    //   "questions": [
+    //     {
+    //       "text": "Question 1 goes here...",
+    //       "options": ["Option A", "Option B", "Option C", "Option D"],
+    //       "answer": "Option A"
+    //     },
+    //     ...
+    //   ]
+    // }
 
-// `;
-//     const result = await model.generateContent(prompt)
-//     console.log(result);
+    // `;
+    //     const result = await model.generateContent(prompt)
+    //     console.log(result);
 
     res.status(500).json({ error: "AI generation failed" });
   }
@@ -145,6 +144,11 @@ router.delete('/:id', protect, requireAdmin, async (req, res) => {
     await prisma.question.deleteMany({
       where: { quizId: req.params.id }
     });
+
+    //Delete attempts
+    await prisma.attempt.deleteMany({
+      where: { quizId: req.params.id }
+    })
 
     // Then delete the quiz itself
     await prisma.quiz.delete({

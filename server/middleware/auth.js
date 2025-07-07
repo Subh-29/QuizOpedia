@@ -2,7 +2,7 @@ import { verifyToken } from '../utils/jwt.js'
 
 export function protect(req, res, next) {
     const authHeader = req.headers.authorization;
-    console.log();
+    // console.log();
     
     if (!authHeader) {
         return res.status(401).json({ error: "No token provided" });
@@ -12,7 +12,7 @@ export function protect(req, res, next) {
     
     try {
         const decode = verifyToken(token);
-        console.log(decode);
+        // console.log(decode);
         
         req.user = decode;
         next();
